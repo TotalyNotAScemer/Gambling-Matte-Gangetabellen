@@ -3,60 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mattespill: Gangemesteren</title>
+    <title>Mattespill: Auto-Neste Modus</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .game-container { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 400px; text-align: center; }
-        .stats { display: flex; justify-content: space-around; margin-bottom: 20px; background: #eef2f3; padding: 10px; border-radius: 10px; font-weight: bold; }
-        .math-box { font-size: 2.5rem; margin: 20px 0; color: #333; }
-        input { font-size: 1.5rem; width: 80px; padding: 5px; text-align: center; border: 2px solid #ddd; border-radius: 5px; }
-        button { cursor: pointer; padding: 10px 20px; border: none; border-radius: 5px; background: #007bff; color: white; font-weight: bold; transition: 0.3s; }
-        button:hover { background: #0056b3; }
-        button:disabled { background: #ccc; }
-        .wheel-area, .roulette-area { margin-top: 20px; border-top: 2px solid #eee; padding-top: 15px; display: none; }
-        .msg { margin-top: 15px; font-weight: bold; min-height: 20px; }
-        .gem-text { color: #9b59b6; }
-        .skip-text { color: #27ae60; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #1a1a2e; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .game-container { background: #16213e; padding: 2rem; border-radius: 20px; box-shadow: 0 0 20px rgba(0,255,255,0.2); width: 420px; text-align: center; border: 2px solid #0f3460; }
+        .stats { display: flex; justify-content: space-around; margin-bottom: 20px; background: #0f3460; padding: 15px; border-radius: 12px; }
+        .stat-item { display: flex; flex-direction: column; font-size: 0.9rem; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: #4ecca3; }
+        .math-box { font-size: 3.5rem; margin: 20px 0; text-shadow: 2px 2px #000; }
+        input { font-size: 2rem; width: 120px; padding: 10px; text-align: center; border: 3px solid #4ecca3; border-radius: 10px; background: #1a1a2e; color: white; outline: none; }
+        input:focus { box-shadow: 0 0 15px #4ecca3; }
+        .btn-row { margin-top: 20px; display: flex; gap: 10px; justify-content: center; }
+        button { cursor: pointer; padding: 12px; border: none; border-radius: 8px; font-weight: bold; transition: 0.2s; flex: 1; }
+        #skipBtn { background: #e94560; color: white; }
+        #skipBtn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .wheel-area, .roulette-area { margin-top: 20px; padding: 15px; border: 2px dashed #4ecca3; border-radius: 10px; animation: glow 1.5s infinite alternate; }
+        @keyframes glow { from { box-shadow: 0 0 5px #4ecca3; } to { box-shadow: 0 0 20px #4ecca3; } }
+        .msg { height: 25px; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="game-container">
-    <h2>✖️ Gangemesteren</h2>
-    
     <div class="stats">
-        <div>⭐ Poeng: <span id="points">0</span></div>
-        <div>💎 Gems: <span id="gems">0</span></div>
-        <div>⏭️ Hopp: <span id="skips">0</span></div>
+        <div class="stat-item"><span>POENG</span><div id="points" class="stat-value">0</div></div>
+        <div class="stat-item"><span>GEMS</span><div id="gems" class="stat-value">0</div></div>
+        <div class="stat-item"><span>HOPP</span><div id="skips" class="stat-value">0</div></div>
     </div>
 
-    <div id="level-indicator">Nivå 1 (1-5)</div>
+    <div id="level-indicator" style="color: #95a5a6;">Nivå 1 (1-5 gangen)</div>
     <div class="math-box" id="question">Laster...</div>
     
-    <input type="number" id="answer" placeholder="?">
-    <button onclick="checkAnswer()">Svar</button>
-    <button id="skipBtn" onclick="useSkip()" style="background:#27ae60;">Bruk hopp</button>
-
+    <input type="number" id="answer" autofocus autocomplete="off">
+    
     <div id="message" class="msg"></div>
 
-    <div id="wheelArea" class="wheel-area">
-        <p>🎉 5 på rad! Du har vunnet et spinn!</p>
-        <button onclick="spinWheel()" style="background:#f1c40f; color:black;">Spinn Lykkehjulet!</button>
+    <div class="btn-row">
+        <button id="skipBtn" onclick="useSkip()">BRUK HOPP (⏭️)</button>
     </div>
 
-    <div id="rouletteArea" class="roulette-area">
-        <p>💎 Du har nok gems til Rulett!</p>
-        <button onclick="playRoulette()" style="background:#8e44ad;">Spill Rulett (10 Gems)</button>
+    <div id="wheelArea" class="wheel-area" style="display:none;">
+        <p>🎡 LYKKEHJUL KLART!</p>
+        <button onclick="spinWheel()" style="background:#f1c40f; color:black;">SPINN NÅ</button>
+    </div>
+
+    <div id="rouletteArea" class="roulette-area" style="display:none;">
+        <p>🎰 GEMS-RULETT</p>
+        <button onclick="playRoulette()" style="background:#8e44ad; color:white;">SPILL (10 💎)</button>
     </div>
 </div>
 
 <script>
-    let points = 0;
-    let gems = 0;
-    let skips = 0;
-    let streak = 0;
-    let currentAns = 0;
-    let level = 1;
+    let points = 0, gems = 0, skips = 0, streak = 0, level = 1, currentAns = 0;
+
+    const inputField = document.getElementById('answer');
 
     function generateQuestion() {
         let min = (level === 1) ? 1 : 5;
@@ -66,45 +66,39 @@
         
         currentAns = n1 * n2;
         document.getElementById('question').innerText = `${n1} × ${n2}`;
-        document.getElementById('answer').value = '';
-        document.getElementById('answer').focus();
+        inputField.value = '';
         updateUI();
     }
 
-    function checkAnswer() {
-        let userAns = parseInt(document.getElementById('answer').value);
-        let msg = document.getElementById('message');
-
-        if (userAns === currentAns) {
+    // Denne funksjonen sjekker svaret automatisk mens du skriver!
+    inputField.addEventListener('input', () => {
+        let val = parseInt(inputField.value);
+        if (val === currentAns) {
             points += 10;
             streak++;
-            msg.innerText = "Riktig! +10 poeng";
-            msg.style.color = "green";
+            document.getElementById('message').innerText = "RIKTIG! ✨";
+            document.getElementById('message').style.color = "#4ecca3";
+            
             if (points >= 100) level = 2;
-        } else {
-            streak = 0;
-            msg.innerText = "Feil, prøv igjen!";
-            msg.style.color = "red";
+            
+            checkBonuses();
+            // Liten pause før neste oppgave så man rekker å se "Riktig!"
+            setTimeout(generateQuestion, 400);
         }
-        
-        checkBonuses();
-        generateQuestion();
-    }
+    });
 
     function useSkip() {
         if (skips > 0) {
             skips--;
-            document.getElementById('message').innerText = "Hoppet over oppgaven!";
+            document.getElementById('message').innerText = "Hoppet over!";
             generateQuestion();
         }
     }
 
     function checkBonuses() {
-        // Lykkehjul trigges ved 5 på rad
         if (streak >= 5) {
             document.getElementById('wheelArea').style.display = 'block';
         }
-        // Rulett trigges hvis man har 10 gems
         if (gems >= 10) {
             document.getElementById('rouletteArea').style.display = 'block';
         } else {
@@ -115,16 +109,15 @@
     function spinWheel() {
         streak = 0;
         document.getElementById('wheelArea').style.display = 'none';
-        
-        let winType = Math.random();
-        if (winType > 0.5) {
-            let wonSkips = Math.floor(Math.random() * 3) + 1;
-            skips += wonSkips;
-            alert(`Lykkehjulet stoppet på: ${wonSkips} Hopp-over!`);
+        let win = Math.random();
+        if (win > 0.5) {
+            let s = Math.floor(Math.random() * 3) + 1;
+            skips += s;
+            alert("Lykkehjul: Du fikk " + s + " hopp!");
         } else {
-            let wonGems = Math.floor(Math.random() * 10) + 1;
-            gems += wonGems;
-            alert(`Lykkehjulet stoppet på: ${wonGems} Gems!`);
+            let g = Math.floor(Math.random() * 10) + 1;
+            gems += g;
+            alert("Lykkehjul: Du fikk " + g + " gems!");
         }
         updateUI();
     }
@@ -132,19 +125,19 @@
     function playRoulette() {
         if (gems >= 10) {
             gems -= 10;
-            let roll = Math.random();
-            if (roll < 0.1) { // Grønn (10% sjanse)
+            let r = Math.random();
+            if (r < 0.1) { // Grønn
                 let s = Math.floor(Math.random() * 7) + 6;
                 skips += s;
-                alert(`GRØNN! Du vant ${s} hopp-over!`);
-            } else if (roll < 0.5) { // Svart (40% sjanse)
-                let g = Math.floor(Math.random() * 20) + 10;
+                alert("GRØNN! Ekstrem flaks! Du fikk " + s + " hopp!");
+            } else if (r < 0.5) { // Svart
+                let g = Math.floor(Math.random() * 15) + 10;
                 gems += g;
-                alert(`SVART! Du vant ${g} nye gems!`);
-            } else { // Rød (50% sjanse)
+                alert("SVART! Du vant " + g + " gems!");
+            } else { // Rød
                 let s = Math.floor(Math.random() * 3) + 3;
                 skips += s;
-                alert(`RØD! Du vant ${s} hopp-over.`);
+                alert("RØD! Du fikk " + s + " hopp.");
             }
         }
         updateUI();
@@ -155,11 +148,10 @@
         document.getElementById('points').innerText = points;
         document.getElementById('gems').innerText = gems;
         document.getElementById('skips').innerText = skips;
-        document.getElementById('level-indicator').innerText = `Nivå ${level} (${level === 1 ? '1-5' : '5-10'})`;
-        document.getElementById('skipBtn').disabled = skips <= 0;
+        document.getElementById('level-indicator').innerText = `Nivå ${level} (${level === 1 ? '1-5' : '5-10'} gangen)`;
+        document.getElementById('skipBtn').disabled = (skips <= 0);
     }
 
-    // Start spillet
     generateQuestion();
 </script>
 
